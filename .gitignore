@@ -1,0 +1,26 @@
+# 字体随包分发（SIL OFL 1.1，许可原文见 assets/fonts/OFL.txt）——**不忽略**。
+# 忽略它就意味着每次 clone 后都必须联网下载，而下载失败正是"装好了却跑不出图"的主要来源。
+# 只忽略下载中断留下的临时文件。
+assets/fonts/*.tmp
+
+# 忽略：Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# 忽略：系统与编辑器
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# 忽略：运行时产物与凭据（绝不入库）
+_wx_token.json
+login_qr_ego.png
+_ego/
+*.log
+*.jsonl
+
+# 打包产物（放在仓库外层，绝不入库）
+*.zip
