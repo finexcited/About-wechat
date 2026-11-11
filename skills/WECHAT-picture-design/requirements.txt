@@ -1,0 +1,4 @@
+# 必需
+Pillow>=9.0
+# 可选（canvas-design 渲染；缺失时自动回退 Pillow 版式）
+# ego-browser 需单独安装 ego lite 客户端，不在 pip 内

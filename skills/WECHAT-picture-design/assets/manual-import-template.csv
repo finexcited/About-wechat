@@ -1,0 +1,4 @@
+渠道,标题,作者,链接,正文
+公众号,示例标题一,某号,https://mp.weixin.qq.com/s/xxxx,"这里粘贴正文或摘要，整段用英文双引号包住，内部引号写成两个双引号"
+小红书,示例标题二,某博主,https://www.xiaohongshu.com/explore/xxxx,"正文可以有多段，用 \n 表示换行"
+网页,示例标题三,,https://example.com/a,"来源不限于这两个平台，任何能公开访问的页面都可以"

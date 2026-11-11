@@ -1,0 +1,38 @@
+{
+  "philosophy": "Margin Notes",
+  "philosophy_file": "assets/design-philosophy.md",
+  "canvas": { "width": 1080, "height": 1440 },
+  "palette": {
+    "paper": "#F7F4EE",
+    "ink": "#1B3A5C",
+    "accent": "#ED6C1D",
+    "muted": "#8A8F98",
+    "line": "#D8D2C6"
+  },
+  "grid": { "columns": 12, "margin": 72, "gutter": 24 },
+  "type": {
+    "title_min": 92,
+    "title_max": 148,
+    "title_line_height": 0.95,
+    "title_tracking": "-0.02em",
+    "headline": 62,
+    "body": 33,
+    "body_line_height": 1.72,
+    "meta": 19,
+    "meta_tracking": "0.18em",
+    "numeral": 300
+  },
+  "rules": {
+    "hairline": 1,
+    "accent_bar": 8,
+    "accent_area_max": 0.04
+  },
+  "photo": {
+    "cover_width": 0.60,
+    "cover_height": 0.44,
+    "inner_height": 0.34,
+    "offset_y": 0.06,
+    "frame": 0
+  },
+  "logo": { "width_ratio": 0.16, "padding_ratio": 0.06, "position": "bottom-right" }
+}

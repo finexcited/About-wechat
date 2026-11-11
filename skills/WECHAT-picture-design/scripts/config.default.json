@@ -1,0 +1,206 @@
+{
+ "redfox": {
+  "api_key": "",
+  "base": "https://redfox.hk",
+  "timeout": 30,
+  "endpoints": {
+   "gzh_hot": "/story/api/gzh/search/hotArticleNew",
+   "xhs_search": "/story/api/xhs/search/search",
+   "xhs_detail": "/story/api/xhs/search/noteDetail",
+   "hot_keyword": "/story/api/hotKeyword/list"
+  }
+ },
+ "wechat": {
+  "appid": "",
+  "secret": "",
+  "article_type": "newspic",
+  "cover_ratio": "1_1",
+  "publish_via": "ui"
+ },
+ "logo": {
+  "default": "assets/logo.png",
+  "note": "把自己的透明底 LOGO 放到 assets/logo.png；横版字标（宽高比 ≥2.2）会被取到 18% 图宽",
+  "enabled": true
+ },
+ "platform": {
+  "name": "微信公众号贴图（图片消息 newspic）",
+  "doc": "https://developers.weixin.qq.com/doc/subscription/api/draftbox/draftmanage/api_draft_add.html",
+  "image_count_max": 20,
+  "image_count_min": 2,
+  "title_max": 32,
+  "title_recommend": [
+   15,
+   20
+  ],
+  "content_max_chars": 20000,
+  "content_recommend": [
+   200,
+   300
+  ],
+  "image_min_px": 720,
+  "image_max_mb": 10,
+  "image_formats": [
+   "jpg",
+   "png"
+  ],
+  "cover_crop_ratios": [
+   "1_1",
+   "16_9",
+   "2.35_1"
+  ],
+  "image_source": "永久素材 material/add_material → image_media_id（不可用 uploadimg URL）",
+  "topic_format": "正文内 #话题名#，无独立字段"
+ },
+ "text_policy": {
+  "note_type": "公众号贴图",
+  "body_min": 200,
+  "body_max": 300,
+  "body_target": 250,
+  "title_max": 32,
+  "title_target_max": 20,
+  "title_min": 8,
+  "topics_min": 3,
+  "topics_max": 5,
+  "per_image_text_max": 100,
+  "source": "微信官方 draft/add（newspic）字段限制 + 贴图运营口径：图 1–20 张、标题≤32 字（建议 15–20）、正文建议 200–300 字、话题 3–5 个写在正文内"
+ },
+ "channels": {
+  "enabled": [
+   "gzh",
+   "xhs",
+   "hot"
+  ],
+  "gzh": {
+   "label": "微信公众号爆款（无贴图专用检索，用公众号图文近似）",
+   "weight": 1.0
+  },
+  "xhs": {
+   "label": "小红书贴图（图文笔记）",
+   "weight": 0.9
+  },
+  "hot": {
+   "label": "全网热点（仅选题信号）",
+   "weight": 0.6
+  },
+  "blocklist": {
+   "words": [
+    "补剂",
+    "保健品",
+    "鱼油",
+    "奥适宝",
+    "orthomol",
+    "山姆",
+    "壁纸",
+    "下单",
+    "团购",
+    "优惠券",
+    "橱窗",
+    "带货",
+    "店铺",
+    "链接在"
+   ],
+   "topics": [
+    "诈骗",
+    "被抓",
+    "抓捕",
+    "涉案",
+    "判刑",
+    "违法"
+   ],
+   "reason": "与业务无关或合规风险高的内容，不得进入选题"
+  },
+  "mode": "redfox",
+  "primary_keyword": [],
+  "rss": {
+   "feeds": [],
+   "limit_per_feed": 20,
+   "interval_sec": 3,
+   "note": "RSS 通道：填 feed URL 后 init --source rss 即可；先用 rss_import.py --check 验证可达性"
+  }
+ },
+ "defaults": {
+  "images_per_note": 6,
+  "images_per_note_min": 4,
+  "images_per_note_max": 9,
+  "max_overlap": 0.15,
+  "ngram_ns": [
+   5,
+   6,
+   7,
+   8
+  ],
+  "logo_busy_edge_threshold": 12.0
+ },
+ "design": {
+  "audience": {
+   "name": "通用读者",
+   "age": "18–35",
+   "traits": [
+    "刷图快、信息密度要求高",
+    "偏好清晰的视觉层级",
+    "对模板化排版无感",
+    "愿意为具体方法停留"
+   ],
+   "implication": "要亮、要快、要有层级；避免深色压抑与长段落"
+  },
+  "theme": "youth-editorial",
+  "style_keywords": "明亮通透 / 橙蓝撞色 / 几何色块 / 大字排版 / 轻微质感颗粒",
+  "image_style": "自然光、通透、日常场景静物（桌面、纸品、工具、窗光），色彩明快，双色点缀；不要暗调、不要厚重滤镜、不要商务感",
+  "tokens": {
+   "band_cover_ratio": 0.32,
+   "band_page_ratio": 0.28,
+   "title_size_cover": 0.082,
+   "title_size_page": 0.07,
+   "eyebrow_size": 0.023,
+   "body_size": 0.031,
+   "subtitle_size": 0.033,
+   "page_index_size": 0.021,
+   "accent_rule": 7,
+   "title_tracking": 0,
+   "eyebrow_tracking": 2,
+   "line_spacing": 1.38,
+   "sticker_angle": -7
+  },
+  "palette": {
+   "ink": "#0E1A2B",
+   "paper": "#F6F7F9",
+   "primary": "#1B3A5C",
+   "accent": "#ED6C1D",
+   "accent_soft": "#FFD8C2"
+  },
+  "variants": {
+   "cover": [
+    "cover_type",
+    "cover_photo"
+   ],
+   "inner": [
+    "inner_editorial",
+    "inner_photo",
+    "inner_quote"
+   ],
+   "rotate": true
+  },
+  "anti_copy": {
+   "dhash_similarity_max": 12,
+   "note": "生成图与参考封面 dHash 汉明距离小于阈值即判为过近，需重绘"
+  },
+  "tone": "克制、可信"
+ },
+ "industry": {
+  "name": "通用内容（请按你的行业修改）",
+  "sub_tone": "克制、可信、不过度承诺",
+  "keywords": [],
+  "note": "只影响受众简报的文字描述；真正的检索词由 init --keyword 传入"
+ },
+ "brand": {
+  "name": "YOUR BRAND",
+  "meta_left": "YOUR BRAND",
+  "caption_prefix": "YOUR BRAND",
+  "note": "页眉左侧小字与图注前缀；改成你的品牌名即可全局生效"
+ },
+ "images": {
+  "source": "ai",
+  "library_path": "",
+  "note": "ai=提示词生图；own=只用自有图库；hybrid=优先自有再生成"
+ }
+}
