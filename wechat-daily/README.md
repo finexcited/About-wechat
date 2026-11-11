@@ -1,5 +1,8 @@
 # wechat-daily
 
+> **仓库位置提示**：本技能已迁入仓库子目录 `wechat-daily/`。克隆后请 `cd wechat-daily` 再按下方步骤操作；
+> 技能目录整体拷贝到 `~/.workbuddy/skills/wechat-daily` 即可使用，包内路径均为相对路径，不受上层目录影响。
+
 > **当前版本 V1.0**（2026-11-05；代码内容对应内部迭代 `v1.0.47`）｜变更记录见 [CHANGELOG.md](CHANGELOG.md)
 
 一个**通用**的公众号日更自动化技能（Agent Skill）：从选题到成品图，一条流水线跑完每天 N 篇推文，并可自动存进公众号草稿箱。
