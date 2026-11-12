@@ -1,0 +1,4 @@
+interface:
+  display_name: "抖音小红书视频采集"
+  short_description: "检索竖屏视频，去水印、处理中文人声并清理元数据"
+  default_prompt: "Use $douyin-xhs-video-harvest to find three matching vertical videos, download them without watermarks, offer Chinese voice removal or target-language AI dubbing, and clean their metadata."
