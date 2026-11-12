@@ -27,6 +27,7 @@ import spec_extract
 import textcheck
 import compose_images
 import canvas_render
+import philosophy
 import check_compliance
 import push_draft
 
@@ -391,12 +392,13 @@ def cmd_verify(args):
 
 # ---------------- 阶段 4.1 提示词 ----------------
 
-PROMPT_TMPL = """【人群】{audience}（{age}）：{traits}。画面要让这个人群觉得"这是给我看的"。
-【版式骨架】{skeleton}；上方 {band}% 为品牌色带（文字后期叠加，画面里不要自带文字），主体场景放在色带以下
-【视觉风格】{style}；{image_style}
-【色彩方案】主色 {primary}，强调 {accent}；明亮通透、橙蓝撞色点缀，避免暗调、厚重滤镜与商务感
-【尺寸】{width}×{height}px，{aspect} 竖版
-【留白区域】上方 {band}% 保持干净可压字；{logo_area} 留出干净低细节区域放 LOGO
+PROMPT_TMPL = """【人群】{audience}（{age}）：{traits}。内容深度与信息密度贴合该人群；配色与光线以下面的设计哲学为准。
+【设计哲学】{phil_zh}——{claim}
+【版式骨架】本篇第 {page} 页用「{layout}」：{hint}
+【视觉风格】{style}
+【色彩方案】底色 {paper}，主色 {primary}，强调 {accent}；按上面的风格执行，不要套用固定的撞色公式；画面纸底尽量贴近底色，便于与文字区无缝衔接
+【尺寸】成片 {width}×{height}px（{aspect} 竖版）；本页图窗是 {win_aspect} {win_kind}，请按 {win_aspect} 出图，{win_crop}
+【留白区域】{logo_area} 留出干净、低细节的区域放 LOGO；其余留白按版式要求执行
 【画面内容】第 {page}/{total} 页：{scene}
 【禁用】画面内任何文字、字母、数字（文字由合成阶段渲染）、品牌 logo、水印、二维码、真实人物肖像
 """
@@ -414,6 +416,9 @@ def cmd_prompts(args):
     spec = common.jload(os.path.join(run_root, "data", "spec.json"))
     if spec is None:
         common.die("请先执行 spec 阶段")
+    cfg = common.load_config()
+    phils, pindex = philosophy.load_all(cfg)
+    plan_file = os.path.join(run_root, "data", "philosophy-plan.json")
     total = (spec["image_count"].get("chosen") or spec["image_count"].get("fallback"))
     for idx in range(1, len(meta["notes"]) + 1):
         nd = common.note_dir(run_root, idx)
@@ -421,31 +426,54 @@ def cmd_prompts(args):
         if copy_obj is None:
             common.die("第%d篇缺少 copy.json" % idx)
         design = spec["design"]
+        phil = philosophy.assign(idx, phils, pindex)
+        variants = canvas_render.assign_variants(idx, total, phil)
         extra = (copy_obj.get("style_keywords") or "").strip()
-        style = design["style_keywords"] + ("；" + extra if extra else "")
-        band_pct = int(round(design["tokens"]["band_cover_ratio"] * 100))
+        if phil.get("id") == "legacy":
+            # 没有哲学库时沿用旧口径
+            style = design["style_keywords"] + ("；" + design["image_style"] if design.get("image_style") else "")
+            style += ("；" + extra if extra else "")
+        else:
+            # 哲学自带完整风格，不再叠加全局风格词（"橙蓝撞色"会抵消"高反差黑白"）
+            style = "；".join(x for x in [phil.get("photo_style", ""), extra] if x)
+        pal = phil["palette"]
+        primary = pal.get("ink") or pal.get("primary")
         prompts = []
         for p in range(1, total + 1):
             if p == 1:
-                scene = "封面主视觉：与标题「%s」呼应的抽象场景或物件特写，主体偏下、上方留出标题空间" % copy_obj.get("title", "")
+                scene = "封面主视觉：与标题「%s」呼应的抽象场景或物件特写" % copy_obj.get("title", "")
             else:
                 ps = (copy_obj.get("pages") or [])[p - 2] if p - 2 < len(copy_obj.get("pages") or []) else {}
                 scene = ps.get("scene") or ("第%d页插图：围绕「%s」的概念化画面，简洁、单一主体"
                                             % (p, ps.get("headline", "要点")))
+            variant = variants[p - 1]
             text = PROMPT_TMPL.format(
                 audience=design["audience"]["name"], age=design["audience"]["age"],
                 traits="、".join(design["audience"]["traits"]),
-                skeleton=spec["layout"].get("description", "顶部色带标题 + 中部主体 + 底部信息条"),
-                band=band_pct, style=style, image_style=design["image_style"],
-                primary=design["palette"]["primary"], accent=design["palette"]["accent"],
+                phil_zh=phil.get("name_zh") or phil.get("name"),
+                claim=phil.get("claim", ""),
+                layout=canvas_render.VARIANT_LABEL.get(variant, variant),
+                hint=canvas_render.ARCH_HINT.get(variant, ""),
+                win_aspect=canvas_render.ARCH_WINDOW.get(variant, ("3:2", "横向", ""))[0],
+                win_kind=canvas_render.ARCH_WINDOW.get(variant, ("3:2", "横向", ""))[1],
+                win_crop=canvas_render.ARCH_WINDOW.get(variant, ("3:2", "横向", ""))[2],
+                style=style, paper=pal["paper"], primary=primary, accent=pal["accent"],
                 width=spec["image"]["width"], height=spec["image"]["height"],
                 aspect=spec["image"]["aspect"].replace(":", "："),
                 logo_area=LOGO_AREA.get(spec["logo"]["position"], "右下角"),
                 page=p, total=total, scene=scene)
-            prompts.append({"page": p, "prompt": text})
+            prompts.append({"page": p, "prompt": text, "variant": variant,
+                            "philosophy": phil["id"]})
             common.write_text(os.path.join(nd, "prompt-%02d.txt" % p), text)
-        common.jdump(os.path.join(nd, "prompts.json"), {"pages": prompts, "style": style})
-    common.ok("生图提示词已生成：%d 篇 × %d 张" % (len(meta["notes"]), total))
+        common.jdump(os.path.join(nd, "prompts.json"),
+                     {"pages": prompts, "style": style, "philosophy": phil["id"],
+                      "philosophy_zh": phil.get("name_zh", "")})
+        print("  #%d 哲学：%s" % (idx, phil.get("name_zh") or phil["id"]))
+    common.jdump(plan_file, {"plan": [{"index": i + 1, "philosophy": philosophy.assign(i + 1, phils, pindex)["id"]}
+                                      for i in range(len(meta["notes"]))],
+                             "pool": [x["id"] for x in phils], "stride": pindex.get("stride")})
+    common.ok("生图提示词已生成：%d 篇 × %d 张（%s）"
+              % (len(meta["notes"]), total, philosophy.summary(phils, pindex, len(meta["notes"]))))
 
 
 def cmd_compose(args):

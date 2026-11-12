@@ -47,13 +47,21 @@ WECHAT-picture-design/
 ├── assets/
 │   ├── logo.png                 # 品牌 LOGO 占位图，替换成你自己的透明底 PNG
 │   ├── manual-import-template.csv  # 无 REDFOX 时的手工素材导入模板（渠道/标题/作者/链接/正文）
-│   ├── design-philosophy.md     # 设计哲学《Margin Notes》：母题、网格、四色、字号逻辑
-│   └── design-tokens.json       # 令牌：画布 1080×1440、边距、字号阶、图片占比、LOGO 比例
+│   ├── design-philosophies/     # 设计哲学库：一套 json = 一套完整设计语言
+│   │   ├── index.json           #   清单与轮抽步长（order / stride）
+│   │   ├── margin-notes.json    #   页边批注：纸白墨蓝橙 + 发丝线 + 描边页码
+│   │   ├── swiss-grid.json      #   瑞士网格：纯白黑红 + 巨量负空间
+│   │   ├── risograph.json       #   丝网套印：牛皮纸荧光粉 + 套印错位
+│   │   ├── kinfolk.json         #   留白静物：米灰柔褐 + 超大字距
+│   │   └── brutalist.json       #   粗野排版：酸性黄压黑 + 高反差黑白图
+│   ├── design-philosophy.md     # 《Margin Notes》完整哲学文本（写法范例）
+│   └── design-tokens.json       # 旧单套令牌，仅作兜底（哲学库缺失时生效）
 ├── docs/
 │   └── setup-questionnaire.md   # 首次初始化问卷（12 题）：选项、默认值、写到哪个字段
 ├── references/
 │   └── api.md                   # Redfox 三接口 + 微信 newspic 字段 + 常见错误码 + 浏览器操作要点
 └── scripts/
+    ├── philosophy.py            # 设计哲学的加载与分配（compose / prompts 共用，保证同篇同源）
     ├── setup_wizard.py          # 首次初始化问卷（12 题，答案直接写进 config.json）
     ├── run.py                   # 编排入口：init / spec / brief / verify-text / prompts / compose / check / draft / report
     ├── common.py                # 配置加载、运行目录、日志、JSON 读写
@@ -219,6 +227,38 @@ python3 $S/run.py draft --run <RUN_DIR> --via ui --space 2
 python3 $S/run.py report --run <RUN_DIR>
 ```
 
+### 5.4 加一套自己的设计哲学
+
+复制任意一个 `assets/design-philosophies/*.json` 改成你的，再把 id 登记进 `index.json` 的 `order`，就生效了——不用改代码。
+
+```jsonc
+{
+  "id": "editorial-bauhaus",          // 文件名与 id 必须一致
+  "name": "Bauhaus Editorial",
+  "name_zh": "包豪斯编辑",
+  "claim": "形式服从功能，几何即装饰。",  // 会写进生图提示词，一句话就够
+  "signature": ["圆形与三角", "原色块面"],   // 会出现在 design-report 里
+  "palette": { "paper": "#F5F2EA", "ink": "#1A1A1A", "accent": "#D62828",
+               "muted": "#8C8C8C", "line": "#DCD6C8", "sub": "#3A3A3A", "body": "#2A2A2A" },
+  "grid": { "columns": 12, "margin": 80, "gutter": 24 },
+  "type": { "title_min": 90, "title_max": 140, "title_line_height": 0.98,
+            "headline": 58, "body": 32, "body_line_height": 1.75,
+            "meta": 18, "meta_tracking": "0.22em", "numeral": 280 },
+  "rules": { "hairline": 1, "accent_bar": 10 },
+  "photo": { "filter": "saturate(1.05) contrast(1.05)" },   // CSS filter，决定出图观感
+  "grain": 0.04,                                            // 颗粒强度 0–0.2
+  "skin": { "photo_border": "0", "show_hair": true,           // 可加 "title_bg"/"duotone"
+            "focus": "center" },
+  "photo_style": "摄影棚硬光、几何投影、原色块面",              // 直接进 prompts 的风格段
+  "layout": { "cover": ["cover-hero-bleed", "cover-split-diagonal"],
+              "inner": ["inner-editorial", "inner-mosaic", "inner-side-band"] }
+}
+```
+
+三条经验：**版式原型从上面 11 个里挑**（写错 id 会自动回落到默认原型，不会崩）；**`photo_style` 要和 `palette` 一致**，否则「冷白硬光 + 牛皮纸底」这种组合会互相打架；**别把 `grain` 开太大**，超过 0.15 在微信压缩后会糊成噪点。
+
+稿子已经发过一批想换风格？把 `design.philosophies.stride` 改一个数，或在 `pool` 里只留没试过的几套，重跑 `compose` 即可——文案不用重写。
+
 ### 5.4 `copy.json` 字段（Agent 唯一要写的文件）
 
 ```json
@@ -264,8 +304,11 @@ python3 $S/run.py report --run <RUN_DIR>
 | `industry.name/sub_tone/keywords` | 行业调性与简报文案 | 通用占位 |
 | `design.audience` | 人群、年龄、特征、设计含义 | 通用读者 18–35 |
 | `design.image_style` | 生图提示词的风格段 | 自然光/通透/静物 |
-| `design.palette` | 四色（纸白、墨蓝、橙、灰） | `#F7F4EE / #1B3A5C / #ED6C1D / #8A8F98` |
-| `design.variants` | 五套版式的启用与轮换 | 2 封面 + 3 内页，按篇轮换 |
+| `design.philosophies.enabled` | 是否启用哲学库轮换 | `true` |
+| `design.philosophies.pool` | 只允许用哪几套（留空=全用） | `[]` |
+| `design.philosophies.stride` | 轮抽步长，与哲学数互质时前 N 篇不重复 | `2` |
+| `design.palette` | 旧色板，仅 Pillow 引擎与兜底使用 | `#F7F4EE / #1B3A5C / #ED6C1D / #8A8F98` |
+| `design.variants` | 旧版式表，仅 Pillow 引擎使用 | 2 封面 + 3 内页 |
 | `design.anti_copy.dhash_similarity_max` | 图像相似阈值（越小越严） | 12 |
 | `text_policy.body_min/max` | 正文字数区间 | 200 / 300 |
 | `defaults.images_per_note` | 每篇张数 | 6（4–9 可调） |

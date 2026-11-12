@@ -1,0 +1,66 @@
+{
+ "id": "margin-notes",
+ "name": "Margin Notes",
+ "name_zh": "页边批注",
+ "claim": "把每一页当作深夜批注过的笔记，而不是排好版的图文。",
+ "signature": [
+  "发丝分隔线",
+  "描边巨型页码",
+  "橙条切分",
+  "错位半格网格"
+ ],
+ "palette": {
+  "paper": "#F7F4EE",
+  "ink": "#1B3A5C",
+  "accent": "#ED6C1D",
+  "muted": "#8A8F98",
+  "line": "#D8D2C6",
+  "sub": "#3B4A5A",
+  "body": "#2E3B4A"
+ },
+ "grid": {
+  "columns": 12,
+  "margin": 72,
+  "gutter": 24
+ },
+ "type": {
+  "title_min": 92,
+  "title_max": 148,
+  "title_line_height": 0.95,
+  "headline": 62,
+  "body": 33,
+  "body_line_height": 1.72,
+  "meta": 19,
+  "meta_tracking": "0.18em",
+  "numeral": 300
+ },
+ "rules": {
+  "hairline": 1,
+  "accent_bar": 8
+ },
+ "photo": {
+  "filter": "saturate(.94) contrast(1.02)"
+ },
+ "grain": 0.05,
+ "skin": {
+  "photo_border": "0",
+  "show_hair": true,
+  "focus": "left"
+ },
+ "photo_style": "自然光静物：纸品、桌面、工具、窗边，浅景深，暖白低饱和，双色点缀；不要暗调、不要厚重滤镜、不要商务摆拍",
+ "layout": {
+  "cover": [
+   "cover-hero-bleed",
+   "cover-photo-top"
+  ],
+  "inner": [
+   "inner-editorial",
+   "inner-quote-band",
+   "inner-photo-top"
+  ]
+ },
+ "canvas": {
+  "width": 1080,
+  "height": 1440
+ }
+}

@@ -1,0 +1,12 @@
+{
+ "version": 1,
+ "note": "设计哲学库：每篇贴图按顺序轮抽一套，版式、配色、字体节奏、配图风格整体切换。新增哲学只要放一个同结构 json 并登记到此文件。",
+ "order": [
+  "margin-notes",
+  "swiss-grid",
+  "risograph",
+  "kinfolk",
+  "brutalist"
+ ],
+ "stride": 2
+}

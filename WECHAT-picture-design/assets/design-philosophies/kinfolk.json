@@ -1,0 +1,67 @@
+{
+ "id": "kinfolk",
+ "name": "Kinfolk Quiet",
+ "name_zh": "留白静物",
+ "claim": "一页只说一件事。把版面当成一间空房间，只放进去必须要有的东西。",
+ "signature": [
+  "超大边距",
+  "细字距极宽",
+  "单图占半幅",
+  "近乎空的版面",
+  "无强调色块"
+ ],
+ "palette": {
+  "paper": "#F4F1EC",
+  "ink": "#3A342E",
+  "accent": "#B08968",
+  "muted": "#A9A29A",
+  "line": "#E2DCD4",
+  "sub": "#6A625A",
+  "body": "#4A443D"
+ },
+ "grid": {
+  "columns": 12,
+  "margin": 112,
+  "gutter": 32
+ },
+ "type": {
+  "title_min": 72,
+  "title_max": 112,
+  "title_line_height": 1.2,
+  "headline": 44,
+  "body": 30,
+  "body_line_height": 2.02,
+  "meta": 16,
+  "meta_tracking": "0.32em",
+  "numeral": 200
+ },
+ "rules": {
+  "hairline": 1,
+  "accent_bar": 3
+ },
+ "photo": {
+  "filter": "saturate(.8) contrast(.98)"
+ },
+ "grain": 0.03,
+ "skin": {
+  "photo_border": "0",
+  "show_hair": false,
+  "focus": "center"
+ },
+ "photo_style": "柔散射光：大面积负空间、单一静物、米灰低饱和、材质肌理清晰；安静、克制、像家居杂志内页",
+ "layout": {
+  "cover": [
+   "cover-photo-top",
+   "cover-stacked-strip"
+  ],
+  "inner": [
+   "inner-stacked-strip",
+   "inner-quote-band",
+   "inner-side-band"
+  ]
+ },
+ "canvas": {
+  "width": 1080,
+  "height": 1440
+ }
+}

@@ -1,0 +1,67 @@
+{
+ "id": "swiss-grid",
+ "name": "Swiss Grid",
+ "name_zh": "瑞士网格",
+ "claim": "信息就是形式。删掉一切不承担功能的元素，让留白去做强调。",
+ "signature": [
+  "严格 12 栏左对齐",
+  "纯白无纹理",
+  "信号红唯一强调",
+  "巨量负空间",
+  "无阴影无圆角"
+ ],
+ "palette": {
+  "paper": "#FFFFFF",
+  "ink": "#111111",
+  "accent": "#E3350D",
+  "muted": "#9A9A9A",
+  "line": "#E4E4E4",
+  "sub": "#4A4A4A",
+  "body": "#2B2B2B"
+ },
+ "grid": {
+  "columns": 12,
+  "margin": 84,
+  "gutter": 28
+ },
+ "type": {
+  "title_min": 84,
+  "title_max": 132,
+  "title_line_height": 1.02,
+  "headline": 54,
+  "body": 30,
+  "body_line_height": 1.86,
+  "meta": 17,
+  "meta_tracking": "0.26em",
+  "numeral": 240
+ },
+ "rules": {
+  "hairline": 1,
+  "accent_bar": 5
+ },
+ "photo": {
+  "filter": "grayscale(.32) contrast(1.08)"
+ },
+ "grain": 0.0,
+ "skin": {
+  "photo_border": "0",
+  "show_hair": false,
+  "focus": "center"
+ },
+ "photo_style": "冷白硬光：清晰几何投影、纯色或浅灰背景、物体严格居中或三分构图、无装饰无道具；克制、理性、可被当作图表阅读",
+ "layout": {
+  "cover": [
+   "cover-photo-top",
+   "cover-split-diagonal"
+  ],
+  "inner": [
+   "inner-side-band",
+   "inner-stacked-strip",
+   "inner-editorial"
+  ]
+ },
+ "canvas": {
+  "width": 1080,
+  "height": 1440
+ }
+}

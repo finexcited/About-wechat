@@ -184,7 +184,13 @@
    "dhash_similarity_max": 12,
    "note": "生成图与参考封面 dHash 汉明距离小于阈值即判为过近，需重绘"
   },
-  "tone": "克制、可信"
+  "tone": "克制、可信",
+  "philosophies": {
+   "enabled": true,
+   "pool": [],
+   "stride": 2,
+   "note": "设计哲学库在 assets/design-philosophies/。enabled=false 或目录缺失时回落到 design-tokens.json 单套；pool 为空表示全用；stride 与哲学数互质时前 N 篇必不重复"
+  }
  },
  "industry": {
   "name": "通用内容（请按你的行业修改）",

@@ -1,0 +1,69 @@
+{
+ "id": "brutalist",
+ "name": "Brutal Type",
+ "name_zh": "粗野排版",
+ "claim": "不修饰、不对齐、不温柔。字足够大，颜色足够脏，信息足够硬。",
+ "signature": [
+  "酸性黄底压黑",
+  "超大字号压边",
+  "粗黑描边图框",
+  "高反差黑白图",
+  "零留白填充"
+ ],
+ "palette": {
+  "paper": "#FFE94A",
+  "ink": "#000000",
+  "accent": "#FF3B00",
+  "muted": "#000000",
+  "line": "#000000",
+  "sub": "#000000",
+  "body": "#000000"
+ },
+ "grid": {
+  "columns": 12,
+  "margin": 56,
+  "gutter": 16
+ },
+ "type": {
+  "title_min": 104,
+  "title_max": 168,
+  "title_line_height": 0.86,
+  "headline": 72,
+  "body": 34,
+  "body_line_height": 1.5,
+  "meta": 18,
+  "meta_tracking": "0.1em",
+  "numeral": 360
+ },
+ "rules": {
+  "hairline": 3,
+  "accent_bar": 18
+ },
+ "photo": {
+  "filter": "grayscale(1) contrast(1.4)"
+ },
+ "grain": 0.08,
+ "skin": {
+  "photo_border": "8px solid #000",
+  "show_hair": true,
+  "focus": "center",
+  "title_bg": "#000000",
+  "title_fg": "#FFE94A"
+ },
+ "photo_style": "高反差黑白：硬闪光、粗颗粒、强几何结构、物体边缘锐利、背景压到纯黑或纯白；不要柔光、不要暖调",
+ "layout": {
+  "cover": [
+   "cover-hero-bleed",
+   "cover-split-diagonal"
+  ],
+  "inner": [
+   "inner-editorial",
+   "inner-mosaic",
+   "inner-quote-band"
+  ]
+ },
+ "canvas": {
+  "width": 1080,
+  "height": 1440
+ }
+}

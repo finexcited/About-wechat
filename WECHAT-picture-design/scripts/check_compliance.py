@@ -33,6 +33,26 @@ def logo_present(page_path, logo_path, bbox):
     return diff < 28.0, round(diff, 2)
 
 
+def _lum(hexcolor):
+    h = (hexcolor or "#FFFFFF").lstrip("#")
+    if len(h) == 3:
+        h = "".join(c * 2 for c in h)
+    try:
+        r, g, b = (int(h[i:i + 2], 16) / 255.0 for i in (0, 2, 4))
+    except Exception:
+        return 0.0
+
+    def f(c):
+        return c / 12.92 if c <= 0.03928 else ((c + 0.055) / 1.055) ** 2.4
+    return 0.2126 * f(r) + 0.7152 * f(g) + 0.0722 * f(b)
+
+
+def _contrast(a, b):
+    la, lb = _lum(a), _lum(b)
+    hi, lo = max(la, lb), min(la, lb)
+    return (hi + 0.05) / (lo + 0.05)
+
+
 def artifact_sig(nd, manifest, run_root):
     """产物签名：copy.json + 全部合成图，用于草稿阶段判定自检是否仍对应当前产物。"""
     import hashlib
@@ -122,17 +142,30 @@ def check_note(run_root, idx, note, spec, cfg):
         items.append({"id": "5-张数", "status": "PASS" if ok_count else "FAIL",
                       "detail": detail})
 
-    col = spec["color"]
-    hue, sat = spec_extract.hue_of(col["primary"])
-    blue_ok = 195 <= hue <= 250
-    if blue_ok or col.get("switch_reason"):
-        detail = "主色 %s（色相 %.0f°）" % (col["primary"], hue)
-        if col.get("switch_reason"):
-            detail += "；已记录切换理由"
-        items.append({"id": "6-色系", "status": "PASS", "detail": detail})
+    # 第六项：配色可读性
+    # 启用设计哲学后，每篇底色/墨色都不同（酸性黄、牛皮纸、纯白…），
+    # 再按「必须偏蓝」判会把合规的哲学误杀；改为校验纸底与正文的对比度，
+    # 这才是自定义哲学时真正会踩的坑（配色好看但字看不清）。
+    pal = (manifest or {}).get("philosophy_palette")
+    if pal:
+        cr = _contrast(pal.get("paper", "#FFFFFF"), pal.get("body") or pal.get("ink", "#000000"))
+        ok = cr >= 4.5
+        detail = "纸底 %s / 正文 %s，对比度 %.1f:1" % (
+            pal.get("paper"), pal.get("body") or pal.get("ink"), cr)
+        items.append({"id": "6-色系", "status": "PASS" if ok else "FAIL",
+                      "detail": detail + ("" if ok else "（低于 4.5:1，正文会看不清）")})
     else:
-        items.append({"id": "6-色系", "status": "FAIL",
-                      "detail": "主色 %s 不在稳重蓝色族且未记录切换理由" % col["primary"]})
+        col = spec["color"]
+        hue, sat = spec_extract.hue_of(col["primary"])
+        blue_ok = 195 <= hue <= 250
+        if blue_ok or col.get("switch_reason"):
+            detail = "主色 %s（色相 %.0f°）" % (col["primary"], hue)
+            if col.get("switch_reason"):
+                detail += "；已记录切换理由"
+            items.append({"id": "6-色系", "status": "PASS", "detail": detail})
+        else:
+            items.append({"id": "6-色系", "status": "FAIL",
+                          "detail": "主色 %s 不在稳重蓝色族且未记录切换理由" % col["primary"]})
 
     sig = artifact_sig(nd, manifest, run_root) if manifest else None
     return {"index": idx, "note_id": note["id"], "items": items,

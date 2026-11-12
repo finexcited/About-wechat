@@ -1,0 +1,68 @@
+{
+ "id": "risograph",
+ "name": "Riso Overprint",
+ "name_zh": "丝网套印",
+ "claim": "像一张套色没对准的丝网印：颜色撞、边错位、纸有毛孔，但情绪是热的。",
+ "signature": [
+  "双色套印错位",
+  "粗网点叠印",
+  "牛皮纸底",
+  "满版色块",
+  "标题压边出血"
+ ],
+ "palette": {
+  "paper": "#F2E7D3",
+  "ink": "#171717",
+  "accent": "#FF4B7D",
+  "muted": "#7A6F5C",
+  "line": "#D9C9AC",
+  "sub": "#3A322A",
+  "body": "#2A241E"
+ },
+ "grid": {
+  "columns": 12,
+  "margin": 64,
+  "gutter": 20
+ },
+ "type": {
+  "title_min": 96,
+  "title_max": 156,
+  "title_line_height": 0.92,
+  "headline": 66,
+  "body": 33,
+  "body_line_height": 1.68,
+  "meta": 18,
+  "meta_tracking": "0.2em",
+  "numeral": 320
+ },
+ "rules": {
+  "hairline": 1,
+  "accent_bar": 14
+ },
+ "photo": {
+  "filter": "saturate(1.28) contrast(1.06)"
+ },
+ "grain": 0.14,
+ "skin": {
+  "photo_border": "0",
+  "show_hair": true,
+  "focus": "center",
+  "duotone": "#FF4B7D"
+ },
+ "photo_style": "高饱和双色套印感：色块拼贴、粗网点、牛皮纸肌理、边缘轻微错位；可以夸张、可以不完美，但不要暗调与商务感",
+ "layout": {
+  "cover": [
+   "cover-hero-bleed",
+   "cover-mosaic"
+  ],
+  "inner": [
+   "inner-mosaic",
+   "inner-quote-band",
+   "inner-stacked-strip"
+  ]
+ },
+ "canvas": {
+  "width": 1080,
+  "height": 1440
+ }
+}

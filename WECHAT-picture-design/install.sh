@@ -74,7 +74,8 @@ cfg = common.load_config()
 need = ["redfox", "wechat", "platform", "text_policy", "industry", "defaults", "design"]
 miss = [k for k in need if k not in cfg]
 print("  ✅ 模块导入正常，配置完整" if not miss else "  ❌ 配置缺字段: %s" % miss)
-print("  ✅ 设计令牌：%s" % canvas_render.load_tokens()["philosophy"])
+_c, phils, _idx = canvas_render.resolve_philosophies()
+print("  ✅ 设计哲学库：%d 套（%s）" % (len(phils), "、".join(x.get("name_zh") or x["id"] for x in phils)))
 PY
 }
 
